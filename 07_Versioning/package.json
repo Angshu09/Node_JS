@@ -1,15 +1,14 @@
 {
-  "name": "06_urls",
+  "name": "07_versioning",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node index"
+    "start": "node index.js"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "express": "^5.1.0",
-    "url": "^0.11.4"
+    "express": "^5.1.0"
   }
 }
