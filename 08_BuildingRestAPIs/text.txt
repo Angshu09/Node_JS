@@ -1,0 +1,18 @@
+REST API - JSON 
+
+GET /users - render a HTML document
+GET /api/users - List all users
+GET /api/users/1 - get the user with id 1
+GET /api/users/2 - get the user with id 2
+
+Dynamic path parameters
+GET /api/users/:id
+:id ---> variable | dynamic
+
+POST /api/users - create new user
+
+PATCH /api/users/1 - edit the user with id 1
+
+DELETE /api/users/1 - delete the user with id 1
+
+Generating fake data - https://www.mockaroo.com/
