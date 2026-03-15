@@ -1,0 +1,4 @@
+
+1773287944830, GET, /api/users
+1773287962007, DELETE, /api/users/999
+1773557121127, GET, /api/users
