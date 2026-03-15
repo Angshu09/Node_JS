@@ -1,5 +1,5 @@
 {
-  "name": "08_buildingrestapis",
+  "name": "10_HttpHeaders",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
