@@ -2,6 +2,7 @@ REST API - JSON
 
 GET /users - render a HTML document
 GET /api/users - List all users
+
 GET /api/users/1 - get the user with id 1
 GET /api/users/2 - get the user with id 2
 

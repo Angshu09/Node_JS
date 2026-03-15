@@ -1,103 +1,111 @@
 const express = require("express");
 let users = require("./mockData.json");
 const fs = require("fs");
+
 const app = express();
+const PORT = 8000;
 
-const port = 8000;
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-//Middleware - plugin
-app.use(express.urlencoded({ extended: false }));
+//Routes --->
 
-app.use((req, res, next) => {
-  fs.appendFile(
-    "./log.txt",
-    `\n${Date.now()}: ${req.method}: ${req.path}`,
-    (err, data) => {
-      next();
-    }
-  );
-});
-
-app.use((req, res, next) => {
-  console.log("hello from middleware 1");
-  // return res.json({msg: "hello from middleware 1"})
-  req.myUserName = "Angshu.dev"; //Here we are add an extra property on the req object
-  next();
-});
-
-app.use((req, res, next) => {
-  console.log("Hello from middleware 2" + req.myUserName);
-  next();
-});
-
-app.get("/users", (req, res) => {
-  const html = `
-        <ul>
-            ${users.map((user) => `<li>${user.first_name}</li>`).join("")}
-        </ul>
-    `;
-  res.send(html);
-});
-
-//Routes
-//Rest API
+//android and web dynamic
 app.get("/api/users", (req, res) => {
-  console.log(res.myUserName);
-  res.setHeader("X-myName", "Angshu Das");
   return res.json(users);
 });
 
-//:id this colon is a dynamic value
+//it will return a html page
+app.get("/users", (req, res) => {
+  const html = `<ul>
+    ${users
+      .map(
+        (user) =>
+          `<li>${user.first_name} ${user.last_name}, ${user.email}, ${user.gender}</li>`,
+      )
+      .join("")}
+  </ul>`;
+
+  res.send(html);
+});
+
+//android and web dynamic
+// app.get("/api/users/:id", (req, res) => {
+//   const user = users.find((user) => user.id === Number(req.params.id))
+//   return res.json(user)
+// })
+
+//a merged way to do the requests for a same route get, edit, delete users
 app
   .route("/api/users/:id")
   .get((req, res) => {
-    const id = Number(req.params.id);
-    const user = users.find((user) => user.id === id);
-    if (!user) {
-      return res.status(404).json({ msg: "User not found" });
-    }
+    //getting user with id
+    const user = users.find((user) => user.id === Number(req.params.id));
     return res.json(user);
   })
   .patch((req, res) => {
-    //Edit user with id
+    //edit user with id
     const id = Number(req.params.id);
-    const body = req.body;
-    users = users.map((user) => {
-      if (user.id === id) {
-        return { ...user, ...body };
-      }
-      return user;
-    });
-    fs.writeFile("./mockData.json", JSON.stringify(users), (err, data) => {
-      return res.json({ status: "Edited", id: id });
-    });
+
+    let user = users.find((user) => user.id === id);
+
+    if (user) {
+      const index = users.indexOf(user);
+      user = { ...user, ...req.body };
+      users[index] = user;
+
+      fs.writeFile("./mockData.json", JSON.stringify(users), (err) => {
+        if (err)
+          return res.status(500).json({ success: "There is some issue " });
+
+        return res.json({
+          user: user,
+          status: "success",
+        });
+      });
+    } else {
+      return res.json({ status: "user not found" });
+    }
   })
   .delete((req, res) => {
-    //Delete user with id
-    const id = Number(req.params.id);
-    const body = req.body;
-    users = users.filter((user) => user.id != id);
-    fs.writeFile("./mockData.json", JSON.stringify(users), (err, data) => {
-      return res.json({ status: "Deleted", id: id });
-    });
-  });
+  const id = Number(req.params.id);
 
-app.post("/api/users", (req, res) => {
-  //Create a new user
-  const body = req.body;
-  if (
-    !body ||
-    !body.first_name ||
-    !body.last_name ||
-    !body.email ||
-    !body.gender
-  ) {
-    return res.status(400).json({ msg: "All fields required" });
+  const index = users.findIndex((user) => user.id === id);
+
+  if (index === -1) {
+    return res.status(404).json({ status: "user not found" });
   }
-  users.push({ id: users.length + 1, ...body });
-  fs.writeFile("./mockData.json", JSON.stringify(users), (err, data) => {
-    return res.status(201).json({ status: "Success", id: users.length });
+
+  //this means it will only going to remove 1 element because the syntax of splice is - array.splice(start, deleteCount, item1, item2, ...)
+  users.splice(index, 1);
+
+  fs.writeFile("./mockData.json", JSON.stringify(users), (err) => {
+    if (err) {
+      return res.status(500).json({
+        status: "server error",
+      });
+    }
+
+    return res.json({
+      status: "success",
+    });
   });
 });
 
-app.listen(port, () => console.log(`Server started at PORT:${port}`));
+//creating new user
+app.post("/api/users", (req, res) => {
+  const newUser = { ...req.body, id: users[users.length - 1].id + 1 };
+
+  users.push(newUser);
+
+  fs.writeFile("./mockData.json", JSON.stringify(users), (err) => {
+    if (err) return res.status(500).json({ success: false });
+
+    return res.json({
+      success: true,
+      id: newUser.id,
+    });
+  });
+});
+
+app.listen(PORT, () => console.log(`Server started on PORT- ${PORT}`));
