@@ -1,0 +1,16 @@
+{
+  "name": "13_ModelViewController",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "express": "^5.1.0",
+    "mongoose": "^9.3.1",
+    "nodemon": "^3.1.10"
+  }
+}
