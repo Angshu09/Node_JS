@@ -1,0 +1,19 @@
+{
+  "name": "14_customurlshortnerproject",
+  "version": "1.0.0",
+  "description": "This project will short the long URLs ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "author": "Angshu Das",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^5.0.2",
+    "express": "^5.2.1",
+    "mongoose": "^9.3.2",
+    "nanoid": "^5.1.7",
+    "nodemon": "^3.1.14"
+  }
+}
