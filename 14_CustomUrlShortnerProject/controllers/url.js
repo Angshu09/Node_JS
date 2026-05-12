@@ -14,22 +14,22 @@ const handleGenerateNewShortUrl = async (req, res) => {
     shortId: shortId,
     redirectUrl: body.url,
     visitHistory: [],
+    createdBy: req.user._id
   });
 
-  return res.render('home', {id: shortId})
- 
+  return res.render("home", { id: shortId });
 };
 
-const handleShortUrlAnalytics =  async (req, res) => {
-    const shortId = req.params.shortId
-    const entry = await URL.findOne({shortId})
-    return res.json({
-        clicks: entry.visitHistory.length,
-        history: entry.visitHistory
-    })
-}
-
+const handleShortUrlAnalytics = async (req, res) => {
+  const shortId = req.params.shortId;
+  const entry = await URL.findOne({ shortId });
+  return res.json({
+    clicks: entry.visitHistory.length,
+    history: entry.visitHistory,
+  });
+};
 
 module.exports = {
-    handleGenerateNewShortUrl, handleShortUrlAnalytics
-}
+  handleGenerateNewShortUrl,
+  handleShortUrlAnalytics,
+};
