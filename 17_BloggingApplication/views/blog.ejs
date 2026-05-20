@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('./partials/head') %>
+    <title>Blog</title>
+</head>
+<body>
+    <%- include('./partials/nav') %>
+    <div class="container mt-5">
+        <h2><%= blog.title %></h2>
+        <img src=<%= blog.coverImageUrl %> alt="coverImage" width='600px'>
+        <pre class="mt-3"><%= blog.body %></pre>
+    </div>
+
+    <div class="container mt-5">
+        <img src="<%= blog.createdBy.profileImageURL %>" alt="profileImage" width="50px">
+        <p><%= blog.createdBy.fullName %></p>
+    </div>
+
+    <div class="container mt-5">
+        <h3>Comments</h3>
+        <% if (user) { %>
+            <form action=<%= `/blog/comment/${blog._id}` %> method="post">
+         <div class="mb-3">
+          <input
+            type="text"
+            name="content"
+            class="form-control"
+            id="content"
+            placeholder="Write your comments "
+          />
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+       </form>
+        <% } %>
+    </div>
+    <div class=" container mt-3">
+        <% comments.forEach(comment => { %>
+            <div class="mt-2 border">
+                <img src="<%= comment.createdBy.profileImageURL %>" alt="profileImage" width="30px">
+               
+               <%= comment.createdBy.fullName %>
+                <p><%= comment.content %></p>
+            </div>
+        <% }) %>
+    </div>
+    <%- include('./partials/script') %>
+</body>
+</html>
