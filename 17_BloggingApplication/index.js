@@ -34,3 +34,7 @@ app.get("/", async (req, res) => {
 });
 
 app.listen(PORT, () => console.log(`Server started on the port ${PORT}`));
+
+
+
+mongodb+srv://angshu:<db_password>@cluster0.jnecgun.mongodb.net/?appName=Cluster0
